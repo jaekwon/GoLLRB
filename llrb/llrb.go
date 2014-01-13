@@ -22,6 +22,13 @@ type LLRB struct {
 	root  *Node
 }
 
+// This is only for taking a snapshot for the
+// purpose of serializing/iterating.
+// DO NOT MODIFY THE RESULTING TREE!
+func (tree *LLRB) Snapshot() *LLRB {
+    return &LLRB{tree.count, tree.root}
+}
+
 type Node struct {
 	Item
 	Left, Right *Node // Pointers to left and right child nodes
