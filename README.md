@@ -1,14 +1,12 @@
 # Notice from the forker
 
 This is a fork of the original GoLLRB to make the nodes immutable.
-This slower by an order of magnitude, but makes it possible to serialize/iterate
+This makes it slower by an order of magnitude, but makes it possible to serialize/iterate
 over a tree while it is still being updated live.
 
 Well, it isn't completely immutable. Node colors are still mutable, but you
-probably don't care about that data. This also means that you can't fork a tree
-and use it as a separate sovereign tree.
-
-I'm interested in making this faster but not sure how to do so.
+probably don't care about that. This also means that you can't fork a tree
+and use it as a separate sovereign tree, as the colors will get mixed up.
 
 # GoLLRB
 
