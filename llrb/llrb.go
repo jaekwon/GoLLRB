@@ -29,6 +29,11 @@ type Node struct {
 	// In the LLRB, new nodes are always red, hence the zero-value for node
 }
 
+func (node *Node) Copy() *Node {
+	var c Node = *node
+	return &c
+}
+
 type Item interface {
 	Less(than Item) bool
 }
@@ -170,6 +175,7 @@ func (t *LLRB) replaceOrInsert(h *Node, item Item) (*Node, Item) {
 		return newNode(item), nil
 	}
 
+	h = h.Copy()
 	h = walkDownRot23(h)
 
 	var replaced Item
@@ -202,6 +208,7 @@ func (t *LLRB) insertNoReplace(h *Node, item Item) *Node {
 		return newNode(item)
 	}
 
+	h = h.Copy()
 	h = walkDownRot23(h)
 
 	if less(item, h.Item) {
@@ -282,6 +289,7 @@ func deleteMin(h *Node) (*Node, Item) {
 		h = moveRedLeft(h)
 	}
 
+	h = h.Copy()
 	var deleted Item
 	h.Left, deleted = deleteMin(h.Left)
 
@@ -315,6 +323,7 @@ func deleteMax(h *Node) (*Node, Item) {
 	if !isRed(h.Right) && !isRed(h.Right.Left) {
 		h = moveRedRight(h)
 	}
+	h = h.Copy()
 	var deleted Item
 	h.Right, deleted = deleteMax(h.Right)
 
@@ -340,6 +349,7 @@ func (t *LLRB) delete(h *Node, item Item) (*Node, Item) {
 	if h == nil {
 		return nil, nil
 	}
+	h = h.Copy()
 	if less(item, h.Item) {
 		if h.Left == nil { // item not present. Nothing to delete
 			return h, nil
@@ -389,6 +399,7 @@ func isRed(h *Node) bool {
 
 func rotateLeft(h *Node) *Node {
 	x := h.Right
+	h, x = h.Copy(), x.Copy()
 	if x.Black {
 		panic("rotating a black link")
 	}
@@ -401,6 +412,7 @@ func rotateLeft(h *Node) *Node {
 
 func rotateRight(h *Node) *Node {
 	x := h.Left
+	h, x = h.Copy(), x.Copy()
 	if x.Black {
 		panic("rotating a black link")
 	}
@@ -422,6 +434,7 @@ func flip(h *Node) {
 func moveRedLeft(h *Node) *Node {
 	flip(h)
 	if isRed(h.Right.Left) {
+		h = h.Copy()
 		h.Right = rotateRight(h.Right)
 		h = rotateLeft(h)
 		flip(h)
